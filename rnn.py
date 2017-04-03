@@ -137,3 +137,22 @@ with tf.Session(graph = nn_graph) as s:
             _iter += 1
 
     saver.save(s, 'checkpoints/sentiment.ckpt')
+
+# Test
+test_acc = []
+with tf.Session(graph = nn_graph) as s:
+    saver.restore(s, tf.train.latest_checkpoint('/output/checkpoints'))
+    test_state = s.run(cell.zero_state(batch_size, tf.float32))
+
+    for i, (x, y) in enumerate(get_batches(test_x, test_y, batch_size), 1):
+        feed = {
+            _inputs : x,
+            _labels : y[:, None],
+            keep_prob : 1,
+            initial_state : test_state
+        }
+
+        batch_acc, test_state = s.run([accuracy, final_state], feed_dict = feed)
+        test_acc.append(batch_acc)
+
+    print("Testing Accuracy: {:.3f}".format(np.mean(test_acc)))
