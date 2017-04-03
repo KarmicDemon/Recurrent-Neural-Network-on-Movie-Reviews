@@ -39,7 +39,7 @@ for _, row in enumerate(review_ints):
 
 _ = int(len(features) * .8)
 train_x, val_x = features[:_], features[_:]
-train_y, val_y = features[:_], features[_:]
+train_y, val_y = labels[:_], labels[_:]
 
 _ = int(len(val_x) * .5)
 val_x, test_x = val_x[:_], val_x[_:]
@@ -114,7 +114,7 @@ with tf.Session(graph = nn_graph) as s:
 
             if _iter % 5 == 0:
                 print("Epoch: {}/{}".format(e, epochs),
-                    "Iteration: {}".format(iteration),
+                    "Iteration: {}".format(_iter),
                     "Train loss: {:.3f}".format(loss))
 
             if _iter % 25 == 0:
